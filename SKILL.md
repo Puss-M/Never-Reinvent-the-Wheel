@@ -20,6 +20,37 @@ This skill is intended to be portable across agent workflows. When used outside 
 - Use current maintenance and adoption signals. Prefer real recency indicators, stars, forks, downloads, model likes, or similar ecosystem-specific traction signals when available.
 - Stop and ask for confirmation after the GitHub phase and again after the secondary-platform phase before continuing to a broader search or final synthesis.
 
+## Triggering
+
+Use this skill proactively when the user is clearly about to build a complete product, subsystem, or workflow from scratch, even if they did not explicitly ask for a build-vs-buy review yet.
+
+Strong trigger patterns:
+
+- "I want to build", "help me build", "I am going to make", "create a project for"
+- complete systems such as auth, upload, queue, editor, parser, crawler, chat, scheduling, feature flags, developer portals, agent frameworks, or workflow engines
+- requests that imply a reusable product rather than a one-off script or tiny fix
+- "from scratch", "without dependencies", "implement my own", "no framework"
+
+High-frequency wheel-making areas:
+
+- auth and permissions
+- parsing and document extraction
+- infrastructure and workflow orchestration
+- common business subsystems such as billing, uploads, editors, dashboards, or notifications
+- AI agent frameworks, automation runners, and multimodal pipelines
+
+Do not trigger by default when:
+
+- the user explicitly says the task is for learning, teaching, or practice
+- the user is debugging or modifying an existing codebase
+- the request is a narrow algorithm, regex, or function-level question
+- the user has already chosen a concrete upstream project and wants help using it
+- the task is obviously local and one-off rather than a reusable product decision
+
+When triggering proactively, interrupt briefly before implementation work starts:
+
+> "Before building this, I should check whether strong existing projects already cover most of it. I will do a GitHub baseline pass first."
+
 ## Workflow
 
 ### Phase 0: Frame The Request

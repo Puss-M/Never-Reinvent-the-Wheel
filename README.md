@@ -25,6 +25,16 @@ This is most useful before architecture work or implementation begins.
 - Produce a final recommendation with one explicit outcome:
   `Adopt existing project`, `Fork/compose an existing component`, or `Build from scratch`
 
+## When It Should Interrupt
+
+This repository is designed to intervene before implementation when an agent sees obvious wheel-making signals, especially:
+
+- "I want to build" requests for complete systems or products
+- "from scratch" or "without dependencies" phrasing
+- high-repeat categories such as auth, uploads, parsers, queues, dashboards, editors, workflow engines, and agent frameworks
+
+It should usually stay quiet for learning exercises, bug fixing, narrow algorithm questions, or work that is clearly based on an already chosen upstream project.
+
 ## Supported Agent Entry Points
 
 | Agent or workflow | Entry file | Notes |
@@ -43,6 +53,8 @@ This repository is not an official integration for every agent. Different client
 ├── LICENSE
 ├── README.md
 ├── SKILL.md
+├── scripts/
+│   └── github-baseline-search.mjs
 └── agents/
     └── openai.yaml
 ```
@@ -65,6 +77,17 @@ Copy the contents of `CLAUDE.md` into the instruction file or project guidance m
 ### Other Agents
 
 If your tool accepts a system prompt, instruction file, or reusable markdown playbook, start with `CLAUDE.md`. If it has first-class skill support similar to Codex, start with `SKILL.md`.
+
+## Optional Helper Script
+
+If you want a repeatable GitHub-only baseline instead of ad hoc searching, use:
+
+```bash
+node scripts/github-baseline-search.mjs "feature flag platform"
+node scripts/github-baseline-search.mjs "document extraction agent" --limit 5 --min-stars 200
+```
+
+The script is optional. The repository still works as a pure instruction pack without it.
 
 ## Example Prompts
 

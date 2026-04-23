@@ -14,6 +14,36 @@ Treat this as a pre-development architecture review, not an implementation task.
 - Prefer current maintenance and adoption signals such as update recency, stars, forks, downloads, likes, or ecosystem-specific traction markers.
 - Stop and ask for confirmation after the GitHub phase and again after the secondary-platform phase before broadening the search or delivering final synthesis.
 
+## Triggering
+
+Use this instruction pack proactively when the user is about to build a complete product, subsystem, or workflow from scratch.
+
+Strong trigger patterns:
+
+- "I want to build", "help me build", "create a project", "design a system"
+- "from scratch", "without dependencies", "implement my own", "no framework"
+- requests for reusable products such as auth, upload, queue, parser, chat, editor, dashboard, agent, or automation platforms
+
+High-frequency wheel-making areas:
+
+- auth and permissions
+- parsers, crawlers, and document extraction
+- chat, queues, schedulers, logging, and workflow engines
+- billing, uploads, editors, dashboards, and admin systems
+- AI agent frameworks, orchestration layers, and multimodal pipelines
+
+Do not trigger by default when:
+
+- the user says it is for learning, teaching, or practice
+- the user is debugging or editing existing code
+- the question is narrow and function-level
+- the user already selected a specific upstream project
+- the task is clearly local, one-off, or not a build-vs-buy decision
+
+When triggering proactively, interrupt briefly before implementation work starts:
+
+> "Before building this, I should check whether strong existing projects already cover most of it. I will do a GitHub baseline pass first."
+
 ## Workflow
 
 ### Phase 0: Frame the Request
