@@ -1,4 +1,4 @@
 interface:
   display_name: "Never Reinvent The Wheel"
-  short_description: "Build-vs-buy architecture reviewer"
-  default_prompt: "Use $never-reinvent-the-wheel to evaluate whether this idea should reuse an existing project, fork a component, or be built from scratch."
+  short_description: "GitHub-first multi-platform build-vs-buy reviewer"
+  default_prompt: "Use $never-reinvent-the-wheel to run a GitHub-first, multi-platform review of this idea and decide whether we should adopt an existing project, fork/compose a component, or build from scratch."

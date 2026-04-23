@@ -2,9 +2,9 @@
 
 [English](./README.md)
 
-`Never Reinvent the Wheel` 是一个面向编码 Agent 的开源指令包。它的目标是在真正开始实现之前，强制执行一次 build-vs-buy 审查：先做 GitHub 优先、再按需扩展到其他平台的多平台搜索，然后再决定应该直接采用、基于现有组件 fork/组合，还是从零开始构建。
+`Never Reinvent the Wheel` 是一个面向编码 Agent 的开源 research pack。它会在真正开始实现之前，强制执行一次 GitHub 优先、再按需扩展到其他平台的 build-vs-buy 审查，然后帮助 Agent 判断应该直接采用现有项目、基于现有组件 fork/组合，还是从零开始构建。
 
-这个仓库以兼容 Codex 的 `SKILL.md` 为核心，同时提供适配 Claude Code 风格工作流的 `CLAUDE.md`。整体结构保持轻量，也方便其他支持 Markdown 指令文件的 Agent 复用。
+这个仓库仍然保持 instruction-first：`SKILL.md` 和 `CLAUDE.md` 定义决策流程，`scripts/` 目录则提供可选的辅助脚本，用于更稳定地抓取证据。
 
 ## 适用场景
 
@@ -22,7 +22,7 @@
 
 - 把模糊的产品想法重写成可搜索的能力描述
 - 先在 GitHub 上做第一轮严肃的开源项目基线搜索
-- 再根据想法类型，只在确实相关的生态中继续做第二阶段搜索，例如 npm、PyPI、Hugging Face、Roboflow
+- 再根据想法类型继续查最相关的二级生态，例如 npm、PyPI、Hugging Face、Roboflow
 - 每个搜索阶段结束后先停下来汇报，而不是默认无限扩大搜索
 - 最终只给出一个明确结论：
   `Adopt existing project`、`Fork/compose an existing component` 或 `Build from scratch`
@@ -61,11 +61,19 @@
 ├── README.md
 ├── README_zh.md
 ├── SKILL.md
-├── scripts/
-│   ├── github-baseline-search.mjs
-│   └── validate-repo.mjs
-└── agents/
-    └── openai.yaml
+├── agents/
+│   └── openai.yaml
+└── scripts/
+    ├── _shared.mjs
+    ├── fixtures/
+    │   └── search-fixtures.json
+    ├── github-baseline-search.mjs
+    ├── hf-baseline-search.mjs
+    ├── npm-baseline-search.mjs
+    ├── pypi-baseline-search.mjs
+    ├── roboflow-baseline-search.mjs
+    ├── search-stack.mjs
+    └── validate-repo.mjs
 ```
 
 ## 安装方式
@@ -89,14 +97,49 @@
 
 ## 可选辅助脚本
 
-如果你希望用一个可重复的 GitHub 基线搜索，而不是每次都临时手搜，可以使用：
+这些脚本都是可选的。即使完全不用脚本，这个仓库仍然可以作为纯 instruction pack 使用。
+
+示例：
 
 ```bash
-node scripts/github-baseline-search.mjs "feature flag platform"
-node scripts/github-baseline-search.mjs "document extraction agent" --limit 5 --min-stars 200
+node scripts/github-baseline-search.mjs "feature flag platform" --limit 5
+node scripts/npm-baseline-search.mjs "feature flag platform" --min-downloads 10000
+node scripts/hf-baseline-search.mjs "document extraction agent" --type ai
+node scripts/search-stack.mjs "document extraction agent" --type ai --limit 5
 ```
 
-这个脚本是可选的，而且它只覆盖 GitHub 基线阶段。完整流程并不止 GitHub，还会在需要时继续检查最相关的二级平台。
+脚本边界：
+
+- 脚本负责抓取证据并统一成 JSON
+- 脚本不直接决定 `Adopt`、`Fork/compose` 或 `Build from scratch`
+- 最终结论仍然由 Agent 综合判断
+
+## 平台选择矩阵
+
+| 想法类型 | 必须先查 | 第二阶段平台 |
+| --- | --- | --- |
+| `software` | GitHub 仓库 | npm、PyPI |
+| `ai` | GitHub 仓库 | Hugging Face、Roboflow |
+| `mixed` | GitHub 仓库 | npm、PyPI、Hugging Face、Roboflow |
+
+第二阶段应当有选择地使用：
+
+- 如果 GitHub 已经出现高拟合的成熟项目，第二阶段主要用于验证生态深度，而不是继续无限扩搜
+- 如果二级平台没有带来新的强证据，就应停止
+- 不要把“没有同名项目”当作 `Build from scratch` 的依据
+
+## 评估框架
+
+最终结论应该围绕这些维度比较候选项：
+
+- `relevance`
+- `maintenance`
+- `traction`
+- `completeness`
+- `extensibility`
+- `execution_risk`
+
+辅助脚本会尽量输出支撑这些维度的原始字段，但不会直接给最终结论。
 
 ## 示例 Prompt
 
@@ -120,7 +163,72 @@ I want to build a multimodal document extraction agent for invoices and contract
 Before implementing this developer portal, compare serious open-source candidates and tell me whether we should adopt one, fork a subsystem, or build our own stack.
 ```
 
-### 示例使用场景
+## 示例输出
+
+### GitHub 阶段示例
+
+```json
+{
+  "platform": "github",
+  "status": "ok",
+  "query": "feature flag platform",
+  "returned_count": 2,
+  "items": [
+    {
+      "title": "example/feature-flag-platform",
+      "url": "https://github.com/example/feature-flag-platform",
+      "metrics": {
+        "stars": 5400,
+        "forks": 620
+      },
+      "assessment": {
+        "relevance": "requires_agent_judgment",
+        "maintenance": "high",
+        "traction": "high"
+      }
+    }
+  ]
+}
+```
+
+### 二级平台阶段示例
+
+```json
+{
+  "platform": "huggingface",
+  "status": "ok",
+  "query": "document extraction agent",
+  "source_breakdown": {
+    "models": 1,
+    "datasets": 1,
+    "spaces": 1
+  },
+  "items": [
+    {
+      "source_type": "model",
+      "title": "example/doc-extractor-model",
+      "metrics": {
+        "likes": 480,
+        "downloads": 9400
+      }
+    }
+  ]
+}
+```
+
+### 最终结论示例
+
+```text
+Recommendation: Fork/compose an existing component
+
+Why:
+- GitHub 已经显示出强候选的开源基础项目。
+- npm 和 PyPI 证明相关包生态已经比较成熟。
+- Hugging Face 提供了可用的模型资产，但没有完整的端到端产品。
+- 从零开始会重复建设已有基础设施，而新增差异化有限。
+```
+
+## 示例使用场景
 
 - 创业者想验证一个新的 AI workflow 产品到底有没有真正差异化。
 - 平台团队想避免重复开发一个开源社区里已经很成熟的内部工具。
@@ -139,6 +247,7 @@ Before implementing this developer portal, compare serious open-source candidate
 - 这个仓库不负责直接实现功能。
 - 它更偏向分析强候选，而不是广撒网式抓取。
 - 它是 GitHub 优先，不是 GitHub 唯一。
+- Roboflow 辅助脚本的实时模式目前是实验性的，因为官方 Universe API 需要 API key。
 - 它面向公开互联网研究，因此敏感内部想法应先匿名化。
 - 它能提升决策质量，但不能保证被推荐的上游项目一定安全、健康或适合生产。
 

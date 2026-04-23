@@ -44,6 +44,20 @@ When triggering proactively, interrupt briefly before implementation work starts
 
 > "Before building this, I should check whether strong existing projects already cover most of it. I will do a GitHub baseline pass first."
 
+## Platform Selection
+
+Use GitHub first for every request, then choose only the most relevant secondary platforms:
+
+- `software`: GitHub, then npm and PyPI when package ecosystems matter
+- `ai`: GitHub, then Hugging Face and Roboflow when models, datasets, or demos matter
+- `mixed`: GitHub first, then combine the most relevant software and AI ecosystems without searching everything
+
+Stopping rules:
+
+- if GitHub already shows high-fit mature projects, use the second phase to validate gaps instead of broadening blindly
+- if secondary platforms add no strong new evidence, stop instead of continuing outward
+- do not use "no exact-name match" as evidence for `Build from scratch`
+
 ## Workflow
 
 ### Phase 0: Frame the Request
@@ -92,7 +106,7 @@ Then pause and report:
 - the leading ecosystem patterns
 - what is still unknown
 
-End this phase by explicitly asking whether to continue to secondary platforms, narrow the problem, or stop with a GitHub-only verdict.
+End this phase by explicitly asking whether to continue to secondary platforms, narrow the problem, or stop with a GitHub-first verdict.
 
 ### Phase 2: Secondary Platform Search
 

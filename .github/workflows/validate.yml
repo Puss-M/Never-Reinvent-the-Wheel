@@ -20,3 +20,32 @@ jobs:
 
       - name: Validate key repository files
         run: node scripts/validate-repo.mjs
+
+      - name: Check CLI help output
+        run: |
+          node scripts/github-baseline-search.mjs --help
+          node scripts/npm-baseline-search.mjs --help
+          node scripts/pypi-baseline-search.mjs --help
+          node scripts/hf-baseline-search.mjs --help
+          node scripts/roboflow-baseline-search.mjs --help
+          node scripts/search-stack.mjs --help
+
+      - name: Check structured missing-query errors
+        shell: bash
+        run: |
+          for script in \
+            scripts/github-baseline-search.mjs \
+            scripts/npm-baseline-search.mjs \
+            scripts/pypi-baseline-search.mjs \
+            scripts/hf-baseline-search.mjs \
+            scripts/roboflow-baseline-search.mjs \
+            scripts/search-stack.mjs
+          do
+            set +e
+            output=$(node "$script" 2>&1)
+            status=$?
+            set -e
+            test "$status" -ne 0
+            echo "$output" | grep '"status": "error"'
+            echo "$output" | grep 'MISSING_QUERY'
+          done

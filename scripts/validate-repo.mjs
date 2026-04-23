@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-import { readFileSync, existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
+import { searchStack } from "./search-stack.mjs";
 
 const requiredFiles = [
   "README.md",
@@ -9,24 +10,42 @@ const requiredFiles = [
   "CLAUDE.md",
   "agents/openai.yaml",
   "scripts/github-baseline-search.mjs",
+  "scripts/npm-baseline-search.mjs",
+  "scripts/pypi-baseline-search.mjs",
+  "scripts/hf-baseline-search.mjs",
+  "scripts/roboflow-baseline-search.mjs",
+  "scripts/search-stack.mjs",
+  "scripts/fixtures/search-fixtures.json",
 ];
 
 const checks = [
   {
     file: "README.md",
-    patterns: ["## When It Should Interrupt", "## Optional Helper Script", "[简体中文](./README_zh.md)"],
+    patterns: [
+      "GitHub-first, multi-platform",
+      "## Optional Helper Script",
+      "## Platform Selection Matrix",
+      "## Example Outputs",
+      "[简体中文](./README_zh.md)",
+    ],
   },
   {
     file: "README_zh.md",
-    patterns: ["## 它会在什么时候打断实现", "## 可选辅助脚本", "[English](./README.md)"],
+    patterns: [
+      "GitHub 优先",
+      "## 可选辅助脚本",
+      "## 平台选择矩阵",
+      "## 示例输出",
+      "[English](./README.md)",
+    ],
   },
   {
     file: "SKILL.md",
-    patterns: ["## Triggering", "## Workflow", "## Decision Heuristics"],
+    patterns: ["## Triggering", "## Platform Selection", "## Workflow", "## Decision Heuristics"],
   },
   {
     file: "CLAUDE.md",
-    patterns: ["## Triggering", "## Workflow", "## Decision Heuristics"],
+    patterns: ["## Triggering", "## Platform Selection", "## Workflow", "## Decision Heuristics"],
   },
 ];
 
@@ -50,6 +69,21 @@ for (const { file, patterns } of checks) {
     if (!content.includes(pattern)) {
       fail(`Missing required pattern in ${file}: ${pattern}`);
     }
+  }
+}
+
+process.env.NO_REINVENT_WHEEL_FIXTURE = "1";
+const parsed = await searchStack({
+  query: "document extraction agent",
+  type: "ai",
+  limit: 5,
+  minStars: 100,
+  minDownloads: 1000,
+  pushedWithinDays: 365,
+});
+for (const field of ["query", "type", "platforms_checked", "platform_results", "signals_summary", "errors"]) {
+  if (!(field in parsed)) {
+    fail(`Missing aggregated field in search-stack output: ${field}`);
   }
 }
 

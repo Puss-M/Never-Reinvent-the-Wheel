@@ -2,9 +2,9 @@
 
 [简体中文](./README_zh.md)
 
-`Never Reinvent the Wheel` is an open instruction pack for coding agents. It forces a build-vs-buy review before implementation work starts, so an agent runs a GitHub-first, multi-platform search pass and then recommends whether to adopt, fork/compose, or build from scratch.
+`Never Reinvent the Wheel` is an open research pack for coding agents. It forces a GitHub-first, multi-platform build-vs-buy review before implementation starts, then helps the agent decide whether to adopt an existing project, fork or compose a component, or build from scratch.
 
-The repository is centered on a Codex-compatible `SKILL.md`, with a companion `CLAUDE.md` for Claude Code style workflows and a lightweight structure that other markdown-driven agents can adapt.
+The repository stays instruction-first: `SKILL.md` and `CLAUDE.md` define the decision process, while the `scripts/` directory adds optional helper tooling for repeatable evidence gathering.
 
 ## Who This Is For
 
@@ -24,7 +24,7 @@ This is most useful before architecture work or implementation begins.
 - Search GitHub first for serious reusable projects
 - Continue into the most relevant secondary ecosystems for the idea type, such as npm, PyPI, Hugging Face, or Roboflow
 - Pause after each search phase instead of over-searching by default
-- Produce a final recommendation with one explicit outcome:
+- Produce one explicit outcome:
   `Adopt existing project`, `Fork/compose an existing component`, or `Build from scratch`
 
 ## When It Should Interrupt
@@ -56,11 +56,19 @@ This repository is not an official integration for every agent. Different client
 ├── README.md
 ├── README_zh.md
 ├── SKILL.md
-├── scripts/
-│   ├── github-baseline-search.mjs
-│   └── validate-repo.mjs
-└── agents/
-    └── openai.yaml
+├── agents/
+│   └── openai.yaml
+└── scripts/
+    ├── _shared.mjs
+    ├── fixtures/
+    │   └── search-fixtures.json
+    ├── github-baseline-search.mjs
+    ├── hf-baseline-search.mjs
+    ├── npm-baseline-search.mjs
+    ├── pypi-baseline-search.mjs
+    ├── roboflow-baseline-search.mjs
+    ├── search-stack.mjs
+    └── validate-repo.mjs
 ```
 
 ## Install
@@ -82,16 +90,51 @@ Copy the contents of `CLAUDE.md` into the instruction file or project guidance m
 
 If your tool accepts a system prompt, instruction file, or reusable markdown playbook, start with `CLAUDE.md`. If it has first-class skill support similar to Codex, start with `SKILL.md`.
 
-## Optional Helper Script
+## Optional Helper Scripts
 
-If you want a repeatable GitHub baseline instead of ad hoc searching, use:
+The scripts are optional. The repository still works as a pure instruction pack without them.
+
+Examples:
 
 ```bash
-node scripts/github-baseline-search.mjs "feature flag platform"
-node scripts/github-baseline-search.mjs "document extraction agent" --limit 5 --min-stars 200
+node scripts/github-baseline-search.mjs "feature flag platform" --limit 5
+node scripts/npm-baseline-search.mjs "feature flag platform" --min-downloads 10000
+node scripts/hf-baseline-search.mjs "document extraction agent" --type ai
+node scripts/search-stack.mjs "document extraction agent" --type ai --limit 5
 ```
 
-The script is optional and only covers the GitHub baseline phase. The full instruction pack goes beyond GitHub and continues into selective secondary platforms when the idea type calls for it.
+Script boundary:
+
+- scripts gather evidence and normalize results into JSON
+- scripts do not decide `Adopt`, `Fork/compose`, or `Build from scratch`
+- the final recommendation is still an agent judgment based on the evidence
+
+## Platform Selection Matrix
+
+| Idea type | Mandatory first phase | Secondary platforms |
+| --- | --- | --- |
+| `software` | GitHub repositories | npm, PyPI |
+| `ai` | GitHub repositories | Hugging Face, Roboflow |
+| `mixed` | GitHub repositories | npm, PyPI, Hugging Face, Roboflow |
+
+Use the second phase selectively:
+
+- if GitHub already exposes one or more strong mature matches, use secondary platforms to validate ecosystem depth instead of widening endlessly
+- if secondary platforms add no meaningful evidence, stop
+- do not treat the absence of an exact-name match as evidence for `Build from scratch`
+
+## Evaluation Framework
+
+The final recommendation should compare serious candidates on these dimensions:
+
+- `relevance`
+- `maintenance`
+- `traction`
+- `completeness`
+- `extensibility`
+- `execution_risk`
+
+The helper scripts expose enough raw metadata to support this comparison, but they do not assign the final verdict.
 
 ## Example Prompts
 
@@ -115,7 +158,72 @@ I want to build a multimodal document extraction agent for invoices and contract
 Before implementing this developer portal, compare serious open-source candidates and tell me whether we should adopt one, fork a subsystem, or build our own stack.
 ```
 
-### Example Use Cases
+## Example Outputs
+
+### GitHub Phase Example
+
+```json
+{
+  "platform": "github",
+  "status": "ok",
+  "query": "feature flag platform",
+  "returned_count": 2,
+  "items": [
+    {
+      "title": "example/feature-flag-platform",
+      "url": "https://github.com/example/feature-flag-platform",
+      "metrics": {
+        "stars": 5400,
+        "forks": 620
+      },
+      "assessment": {
+        "relevance": "requires_agent_judgment",
+        "maintenance": "high",
+        "traction": "high"
+      }
+    }
+  ]
+}
+```
+
+### Secondary Platform Example
+
+```json
+{
+  "platform": "huggingface",
+  "status": "ok",
+  "query": "document extraction agent",
+  "source_breakdown": {
+    "models": 1,
+    "datasets": 1,
+    "spaces": 1
+  },
+  "items": [
+    {
+      "source_type": "model",
+      "title": "example/doc-extractor-model",
+      "metrics": {
+        "likes": 480,
+        "downloads": 9400
+      }
+    }
+  ]
+}
+```
+
+### Final Verdict Example
+
+```text
+Recommendation: Fork/compose an existing component
+
+Why:
+- GitHub already shows strong open-source building blocks.
+- npm and PyPI confirm mature package ecosystems.
+- Hugging Face adds usable model assets, but not a full end-to-end product.
+- Building from scratch would duplicate existing infrastructure while adding little differentiation.
+```
+
+## Example Use Cases
 
 - A founder wants to validate whether a new AI workflow product is actually differentiated.
 - A platform team wants to avoid rebuilding an internal tool that already exists upstream.
@@ -134,6 +242,7 @@ Before implementing this developer portal, compare serious open-source candidate
 - This repository does not perform implementation.
 - It favors evidence from strong candidates over broad scraping.
 - It is intentionally GitHub-first, not GitHub-only.
+- The Roboflow helper is experimental for live use because the documented Universe API expects an API key.
 - It is designed for public internet research, so sensitive internal ideas should be anonymized first.
 - It improves decision quality, but it does not guarantee that the chosen upstream project is safe, healthy, or production-ready.
 

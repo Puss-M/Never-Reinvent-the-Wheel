@@ -1,0 +1,149 @@
+{
+  "github": {
+    "total_count": 2,
+    "items": [
+      {
+        "full_name": "example/feature-flag-platform",
+        "html_url": "https://github.com/example/feature-flag-platform",
+        "description": "Feature flags and progressive rollout platform",
+        "stargazers_count": 5400,
+        "forks_count": 620,
+        "language": "TypeScript",
+        "pushed_at": "2026-04-10T12:00:00Z",
+        "created_at": "2023-01-01T00:00:00Z",
+        "license": { "spdx_id": "MIT" }
+      },
+      {
+        "full_name": "example/doc-agent",
+        "html_url": "https://github.com/example/doc-agent",
+        "description": "Document extraction and workflow orchestration",
+        "stargazers_count": 2100,
+        "forks_count": 180,
+        "language": "Python",
+        "pushed_at": "2026-03-29T08:30:00Z",
+        "created_at": "2024-03-15T00:00:00Z",
+        "license": { "spdx_id": "Apache-2.0" }
+      }
+    ]
+  },
+  "npm": {
+    "objects": [
+      {
+        "package": {
+          "name": "feature-flags-js",
+          "version": "3.2.0",
+          "description": "Feature flag SDK and management client",
+          "links": {
+            "npm": "https://www.npmjs.com/package/feature-flags-js",
+            "repository": "https://github.com/example/feature-flags-js"
+          },
+          "date": "2026-04-08T09:00:00.000Z",
+          "keywords": ["feature-flags", "rollout"]
+        },
+        "score": { "final": 712.3 }
+      },
+      {
+        "package": {
+          "name": "doc-extract-kit",
+          "version": "1.9.1",
+          "description": "Document extraction utilities for Node.js",
+          "links": {
+            "npm": "https://www.npmjs.com/package/doc-extract-kit",
+            "repository": "https://github.com/example/doc-extract-kit"
+          },
+          "date": "2026-04-01T07:00:00.000Z",
+          "keywords": ["ocr", "documents"]
+        },
+        "score": { "final": 498.1 }
+      }
+    ],
+    "downloads": {
+      "feature-flags-js": 128000,
+      "doc-extract-kit": 41000
+    }
+  },
+  "pypi": {
+    "search_html": "<a class=\"package-snippet\" href=\"/project/feature-flags-py/\"><span class=\"package-snippet__name\">feature-flags-py</span><p class=\"package-snippet__description\">Python feature flag toolkit</p><time datetime=\"2026-04-06T00:00:00+0000\"></time></a><a class=\"package-snippet\" href=\"/project/document-agent-py/\"><span class=\"package-snippet__name\">document-agent-py</span><p class=\"package-snippet__description\">Document extraction agent toolkit</p><time datetime=\"2026-03-20T00:00:00+0000\"></time></a>",
+    "projects": {
+      "feature-flags-py": {
+        "info": {
+          "name": "feature-flags-py",
+          "version": "0.8.0",
+          "summary": "Python feature flag toolkit",
+          "project_urls": {
+            "Homepage": "https://github.com/example/feature-flags-py"
+          },
+          "license": "MIT"
+        },
+        "releases": {
+          "0.8.0": [
+            {
+              "upload_time_iso_8601": "2026-04-06T00:00:00.000Z"
+            }
+          ]
+        }
+      },
+      "document-agent-py": {
+        "info": {
+          "name": "document-agent-py",
+          "version": "1.2.3",
+          "summary": "Document extraction agent toolkit",
+          "project_urls": {
+            "Homepage": "https://github.com/example/document-agent-py"
+          },
+          "license": "Apache-2.0"
+        },
+        "releases": {
+          "1.2.3": [
+            {
+              "upload_time_iso_8601": "2026-03-20T00:00:00.000Z"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "huggingface": {
+    "models": [
+      {
+        "id": "example/doc-extractor-model",
+        "likes": 480,
+        "downloads": 9400,
+        "pipeline_tag": "document-question-answering",
+        "lastModified": "2026-04-07T12:00:00.000Z"
+      }
+    ],
+    "datasets": [
+      {
+        "id": "example/invoice-dataset",
+        "likes": 150,
+        "downloads": 2600,
+        "task_categories": ["document-understanding"],
+        "lastModified": "2026-03-30T10:00:00.000Z"
+      }
+    ],
+    "spaces": [
+      {
+        "id": "example/doc-agent-demo",
+        "likes": 72,
+        "sdk": "gradio",
+        "lastModified": "2026-04-05T09:00:00.000Z"
+      }
+    ]
+  },
+  "roboflow": {
+    "search": {
+      "results": [
+        {
+          "name": "invoice-detection",
+          "slug": "invoice-detection",
+          "id": "rf_invoice_detection",
+          "project_type": "object-detection",
+          "images": 3400,
+          "stars": 28,
+          "owner": "example"
+        }
+      ]
+    }
+  }
+}
