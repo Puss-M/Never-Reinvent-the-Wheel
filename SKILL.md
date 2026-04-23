@@ -15,6 +15,7 @@ This skill is intended to be portable across agent workflows. When used outside 
 - Use existing search capabilities and focused `site:` queries. Do not invent custom API integrations.
 - Search GitHub first for every request. Do not skip directly to package indexes or model hubs.
 - Keep the search narrow and evidence-based. Inspect only the strongest candidates instead of scraping large result sets.
+- For each serious GitHub candidate, inspect repository structure and at least 1 to 3 implementation files. Do not rely on `README`, repo description, or tags alone to judge actual capabilities.
 - Include a real clickable URL for every project, package, model, or dataset mentioned.
 - Do not fabricate popularity, maintenance, or capability claims. If evidence is weak, say so explicitly.
 - Use current maintenance and adoption signals. Prefer real recency indicators, stars, forks, downloads, model likes, or similar ecosystem-specific traction signals when available.
@@ -101,9 +102,19 @@ For the top 3-5 serious candidates, capture only the minimum evidence needed:
 - URL
 - one-line purpose
 - apparent scope and fit
+- source inspection evidence from repository structure plus 1 to 3 key implementation files
 - maintenance recency
 - traction indicators
 - obvious strengths or red flags
+
+Use `README` only as an entry point. Before you describe what a repository can actually do, verify it against code evidence such as:
+
+- repository structure and major modules
+- entrypoints, CLI wiring, server startup, or package exports
+- core implementation files for the claimed capability
+- configuration, examples, tests, or adapters that confirm the real execution path
+
+When code inspection is partial, say exactly what was verified from source and what remains unverified.
 
 Then pause and report:
 

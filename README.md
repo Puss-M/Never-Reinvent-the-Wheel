@@ -22,6 +22,7 @@ This is most useful before architecture work or implementation begins.
 
 - Reframe vague product ideas into concrete searchable capabilities
 - Search GitHub first for serious reusable projects
+- Inspect repository structure and key source files for serious GitHub candidates instead of trusting `README` alone
 - Continue into the most relevant secondary ecosystems for the idea type, such as npm, PyPI, Hugging Face, or Roboflow
 - Pause after each search phase instead of over-searching by default
 - Produce one explicit outcome:
@@ -234,6 +235,7 @@ Why:
 
 1. Restate the idea and derive the search plan.
 2. Search GitHub first and stop for review.
+   For each serious candidate, inspect repo structure and 1 to 3 implementation files before making capability claims.
 3. Search the most relevant secondary ecosystems for the idea type and stop again.
 4. Deliver one final recommendation with supporting evidence.
 

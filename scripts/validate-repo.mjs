@@ -23,6 +23,7 @@ const checks = [
     file: "README.md",
     patterns: [
       "GitHub-first, multi-platform",
+      "Inspect repository structure and key source files",
       "## Optional Helper Script",
       "## Platform Selection Matrix",
       "## Example Outputs",
@@ -33,6 +34,7 @@ const checks = [
     file: "README_zh.md",
     patterns: [
       "GitHub 优先",
+      "检查目录结构和关键源码文件",
       "## 可选辅助脚本",
       "## 平台选择矩阵",
       "## 示例输出",
@@ -41,11 +43,25 @@ const checks = [
   },
   {
     file: "SKILL.md",
-    patterns: ["## Triggering", "## Platform Selection", "## Workflow", "## Decision Heuristics"],
+    patterns: [
+      "## Triggering",
+      "## Platform Selection",
+      "## Workflow",
+      "## Decision Heuristics",
+      "inspect repository structure and at least 1 to 3 implementation files",
+      "source inspection evidence from repository structure plus 1 to 3 key implementation files",
+    ],
   },
   {
     file: "CLAUDE.md",
-    patterns: ["## Triggering", "## Platform Selection", "## Workflow", "## Decision Heuristics"],
+    patterns: [
+      "## Triggering",
+      "## Platform Selection",
+      "## Workflow",
+      "## Decision Heuristics",
+      "inspect the repository structure and at least 1 to 3 implementation files",
+      "source inspection evidence from repository structure plus 1 to 3 key implementation files",
+    ],
   },
 ];
 

@@ -9,6 +9,7 @@ Treat this as a pre-development architecture review, not an implementation task.
 - Warn before searching if the idea appears sensitive, proprietary, or commercially confidential. Ask the user to anonymize it first if needed.
 - Search GitHub first for every request. Do not skip directly to package indexes, model hubs, or app directories.
 - Use narrow, evidence-based queries. Inspect only the strongest candidates instead of scraping large result sets.
+- For each serious GitHub candidate, inspect the repository structure and at least 1 to 3 implementation files. Do not judge capabilities from `README`, repo description, or tags alone.
 - Include a real URL for every repository, package, model, dataset, or product mentioned.
 - Do not invent popularity, maintenance, or feature claims. If evidence is weak, say so explicitly.
 - Prefer current maintenance and adoption signals such as update recency, stars, forks, downloads, likes, or ecosystem-specific traction markers.
@@ -94,9 +95,19 @@ For the top 3 to 5 serious candidates, capture only the minimum evidence needed:
 - URL
 - one-line purpose
 - apparent scope and fit
+- source inspection evidence from repository structure plus 1 to 3 key implementation files
 - maintenance recency
 - traction indicators
 - obvious strengths or red flags
+
+Use `README` as an entry point, not as final proof. Before describing what a repository actually does, verify it against code evidence such as:
+
+- repository structure and major modules
+- entrypoints, CLI wiring, server startup, or package exports
+- core implementation files for the claimed capability
+- configuration, examples, tests, or adapters that confirm the real execution path
+
+If inspection is partial, state exactly what was confirmed from source and what remains unverified.
 
 Then pause and report:
 
