@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Usage question
+    url: https://github.com/Puss-M/Never-Reinvent-the-Wheel/discussions
+    about: Ask usage questions or discuss portability ideas in Discussions.
