@@ -1,0 +1,4 @@
+interface:
+  display_name: "Never Reinvent The Wheel"
+  short_description: "Build-vs-buy architecture reviewer"
+  default_prompt: "Use $never-reinvent-the-wheel to evaluate whether this idea should reuse an existing project, fork a component, or be built from scratch."
