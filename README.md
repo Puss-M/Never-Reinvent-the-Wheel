@@ -1,5 +1,7 @@
 # Never Reinvent the Wheel
 
+[简体中文](./README_zh.md)
+
 `Never Reinvent the Wheel` is an open instruction pack for coding agents. It forces a build-vs-buy review before implementation work starts, so an agent checks serious existing projects first and then recommends whether to adopt, fork/compose, or build from scratch.
 
 The repository is centered on a Codex-compatible `SKILL.md`, with a companion `CLAUDE.md` for Claude Code style workflows and a lightweight structure that other markdown-driven agents can adapt.
@@ -52,9 +54,11 @@ This repository is not an official integration for every agent. Different client
 ├── CLAUDE.md
 ├── LICENSE
 ├── README.md
+├── README_zh.md
 ├── SKILL.md
 ├── scripts/
-│   └── github-baseline-search.mjs
+│   ├── github-baseline-search.mjs
+│   └── validate-repo.mjs
 └── agents/
     └── openai.yaml
 ```
