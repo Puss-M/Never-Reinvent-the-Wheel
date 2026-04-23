@@ -2,7 +2,7 @@
 
 [English](./README.md)
 
-`Never Reinvent the Wheel` 是一个面向编码 Agent 的开源指令包。它的目标是在真正开始实现之前，强制执行一次 build-vs-buy 审查：先检查是否已经存在足够成熟的项目，再决定应该直接采用、基于现有组件 fork/组合，还是从零开始构建。
+`Never Reinvent the Wheel` 是一个面向编码 Agent 的开源指令包。它的目标是在真正开始实现之前，强制执行一次 build-vs-buy 审查：先做 GitHub 优先、再按需扩展到其他平台的多平台搜索，然后再决定应该直接采用、基于现有组件 fork/组合，还是从零开始构建。
 
 这个仓库以兼容 Codex 的 `SKILL.md` 为核心，同时提供适配 Claude Code 风格工作流的 `CLAUDE.md`。整体结构保持轻量，也方便其他支持 Markdown 指令文件的 Agent 复用。
 
@@ -22,7 +22,7 @@
 
 - 把模糊的产品想法重写成可搜索的能力描述
 - 先在 GitHub 上做第一轮严肃的开源项目基线搜索
-- 只在确实相关的生态中继续做第二阶段搜索
+- 再根据想法类型，只在确实相关的生态中继续做第二阶段搜索，例如 npm、PyPI、Hugging Face、Roboflow
 - 每个搜索阶段结束后先停下来汇报，而不是默认无限扩大搜索
 - 最终只给出一个明确结论：
   `Adopt existing project`、`Fork/compose an existing component` 或 `Build from scratch`
@@ -89,14 +89,14 @@
 
 ## 可选辅助脚本
 
-如果你希望用一个可重复的 GitHub-only 基线搜索，而不是每次都临时手搜，可以使用：
+如果你希望用一个可重复的 GitHub 基线搜索，而不是每次都临时手搜，可以使用：
 
 ```bash
 node scripts/github-baseline-search.mjs "feature flag platform"
 node scripts/github-baseline-search.mjs "document extraction agent" --limit 5 --min-stars 200
 ```
 
-这个脚本是可选的。即使完全不用脚本，这个仓库仍然可以作为纯 instruction pack 使用。
+这个脚本是可选的，而且它只覆盖 GitHub 基线阶段。完整流程并不止 GitHub，还会在需要时继续检查最相关的二级平台。
 
 ## 示例 Prompt
 
@@ -131,13 +131,14 @@ Before implementing this developer portal, compare serious open-source candidate
 
 1. 重述想法并抽取搜索计划。
 2. 先做 GitHub 基线搜索并停下来汇报。
-3. 只在最相关的二级生态中继续搜索，并再次停下来汇报。
+3. 再按想法类型搜索最相关的二级生态，并再次停下来汇报。
 4. 给出一个最终建议，并附上核心证据。
 
 ## 边界和限制
 
 - 这个仓库不负责直接实现功能。
 - 它更偏向分析强候选，而不是广撒网式抓取。
+- 它是 GitHub 优先，不是 GitHub 唯一。
 - 它面向公开互联网研究，因此敏感内部想法应先匿名化。
 - 它能提升决策质量，但不能保证被推荐的上游项目一定安全、健康或适合生产。
 

@@ -2,7 +2,7 @@
 
 [简体中文](./README_zh.md)
 
-`Never Reinvent the Wheel` is an open instruction pack for coding agents. It forces a build-vs-buy review before implementation work starts, so an agent checks serious existing projects first and then recommends whether to adopt, fork/compose, or build from scratch.
+`Never Reinvent the Wheel` is an open instruction pack for coding agents. It forces a build-vs-buy review before implementation work starts, so an agent runs a GitHub-first, multi-platform search pass and then recommends whether to adopt, fork/compose, or build from scratch.
 
 The repository is centered on a Codex-compatible `SKILL.md`, with a companion `CLAUDE.md` for Claude Code style workflows and a lightweight structure that other markdown-driven agents can adapt.
 
@@ -22,7 +22,7 @@ This is most useful before architecture work or implementation begins.
 
 - Reframe vague product ideas into concrete searchable capabilities
 - Search GitHub first for serious reusable projects
-- Check only the most relevant secondary ecosystems for the idea type
+- Continue into the most relevant secondary ecosystems for the idea type, such as npm, PyPI, Hugging Face, or Roboflow
 - Pause after each search phase instead of over-searching by default
 - Produce a final recommendation with one explicit outcome:
   `Adopt existing project`, `Fork/compose an existing component`, or `Build from scratch`
@@ -84,14 +84,14 @@ If your tool accepts a system prompt, instruction file, or reusable markdown pla
 
 ## Optional Helper Script
 
-If you want a repeatable GitHub-only baseline instead of ad hoc searching, use:
+If you want a repeatable GitHub baseline instead of ad hoc searching, use:
 
 ```bash
 node scripts/github-baseline-search.mjs "feature flag platform"
 node scripts/github-baseline-search.mjs "document extraction agent" --limit 5 --min-stars 200
 ```
 
-The script is optional. The repository still works as a pure instruction pack without it.
+The script is optional and only covers the GitHub baseline phase. The full instruction pack goes beyond GitHub and continues into selective secondary platforms when the idea type calls for it.
 
 ## Example Prompts
 
@@ -126,13 +126,14 @@ Before implementing this developer portal, compare serious open-source candidate
 
 1. Restate the idea and derive the search plan.
 2. Search GitHub first and stop for review.
-3. Search only the most relevant secondary ecosystems and stop again.
+3. Search the most relevant secondary ecosystems for the idea type and stop again.
 4. Deliver one final recommendation with supporting evidence.
 
 ## Scope and Limits
 
 - This repository does not perform implementation.
 - It favors evidence from strong candidates over broad scraping.
+- It is intentionally GitHub-first, not GitHub-only.
 - It is designed for public internet research, so sensitive internal ideas should be anonymized first.
 - It improves decision quality, but it does not guarantee that the chosen upstream project is safe, healthy, or production-ready.
 
